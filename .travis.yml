@@ -22,5 +22,5 @@ after_success:
 
     #? Push
     - docker push dynamisdevelopment/deployment-example-client
-    - docker push dynamisdevelopment/deployment-example-nginx
+    - docker push dynamisdevelopment/deployment-example-controller
     - docker push dynamisdevelopment/deployment-example-server
