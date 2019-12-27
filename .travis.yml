@@ -1,0 +1,11 @@
+language: generic 
+sudo: required
+services:
+    - docker 
+
+before_install:
+    - docker build -t dynamisdevelopment/react-test -f ./client/Dockerfile ./client 
+
+script:
+    - docker run -e CI=true dynamisdevelopment/react-test npm test
+
