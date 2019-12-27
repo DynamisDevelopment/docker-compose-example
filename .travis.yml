@@ -3,9 +3,24 @@ sudo: required
 services:
     - docker 
 
+#? Build Test Version
 before_install:
-    - docker build -t dynamisdevelopment/react-test -f ./client/Dockerfile ./client 
+    - docker build -t dynamisdevelopment/test-container -f ./client/Dockerfile ./client 
 
+#? Run Tests
 script:
-    - docker run -e CI=true dynamisdevelopment/react-test npm test
+    - docker run -e CI=true dynamisdevelopment/test-container npm test
 
+after_success:
+    #? Build and Tag
+    - docker build -t dynamisdevelopment/deployment-example-client ./client 
+    - docker build -t dynamisdevelopment/deployment-example-controller ./controller
+    - docker build -t dynamisdevelopment/deployment-example-server ./server
+
+    #? DockerHub Login
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+    #? Push
+    - docker push dynamisdevelopment/deployment-example-client
+    - docker push dynamisdevelopment/deployment-example-nginx
+    - docker push dynamisdevelopment/deployment-example-server
